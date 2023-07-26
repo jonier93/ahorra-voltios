@@ -1,6 +1,8 @@
 package com.example.ahorravoltio;
 
 public class ModelUsuario {
+    private String name;
+    private String usuario;
     private String correo;
     private String password;
 
@@ -20,4 +22,19 @@ public class ModelUsuario {
         this.password = password;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
 }

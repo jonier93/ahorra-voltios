@@ -3,6 +3,7 @@ package com.example.ahorravoltio;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -15,11 +16,16 @@ public class Data_administrator {
     private File file;
     private ModelAgua objAgua;
     private ModelElectricidad objElectricidad;
+    private ModelUsuario objUsuario;
     private int tipoUsuario;
 
 
     public Data_administrator(File file){
         this.file = file;
+    }
+    public Data_administrator(File file, ModelUsuario objUsuario){
+        this.file = file;
+        this.objUsuario = objUsuario;
         tipoUsuario = 0;
     }
 
@@ -36,33 +42,62 @@ public class Data_administrator {
 
     public void saveData(){
         try {
-            FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            if (tipoUsuario == 0) {
-                bufferedWriter.write("{'correo':'jonier@gmail.com', 'password':'12345'}");
+            if(!file.exists()) {
+                Log.i("MyTag","El archivo no existe");
+                FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                if (tipoUsuario == 0) {
+                    bufferedWriter.write("[{'name':'"+objUsuario.getName()+"', " +
+                            "'correo':'"+objUsuario.getCorreo()+"', " +
+                            "'usuario': '"+objUsuario.getUsuario()+"', " +
+                            "'password':'"+objUsuario.getPassword()+"'}]");
+                }
+                else if (tipoUsuario == 1) {
+                    bufferedWriter.write("[{'volumen':'"+objAgua.getVolumen()+"', 'precio':'"
+                            +objAgua.getPrecio()+"', 'mes':'"+objAgua.getMes()+"'}]");
+                }
+                else if (tipoUsuario == 2){
+
+                }
+                bufferedWriter.close();
             }
-            if (tipoUsuario == 1) {
-                bufferedWriter.write("{'volumen':'"+objAgua.getVolumen()+"', 'precio':'"
-                        +objAgua.getPrecio()+"', 'mes':'"+objAgua.getMes()+"'}");
+            else {
+                Log.i("MyTag", "El archivo ya existe");
+                JSONArray jsonData = readData();
+                FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
+                BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+                if (tipoUsuario == 0) {
+                    bufferedWriter.write("[{'name':'"+objUsuario.getName()+"', " +
+                            "'correo':'"+objUsuario.getCorreo()+"', " +
+                            "'usuario': '"+objUsuario.getUsuario()+"', " +
+                            "'password':'"+objUsuario.getPassword()+"'}]");
+                }
+                else if (tipoUsuario == 1) {
+                    String stringData = jsonData.toString();
+                    Log.i("MyTag", stringData);
+                    String stringData_process = stringData.substring(1, stringData.length()-1);
+                    String newAgua = "{'volumen':'"+objAgua.getVolumen()+"', 'precio':'"
+                            +objAgua.getPrecio()+"', 'mes':'"+objAgua.getMes()+"'}";
+                    bufferedWriter.write("["+ stringData_process + ", " + newAgua +"]");
+                }
+                else if (tipoUsuario == 2){
+
+                }
+                bufferedWriter.close();
             }
-            bufferedWriter.close();
         }
 
         catch(Exception ex){
             Log.e("MyTag", ex.toString());
         }
     }
-    public JSONObject readData(){
+    public JSONArray readData(){
         try{
             FileReader fileReader = new FileReader(file.getAbsoluteFile());
             BufferedReader bufferReader = new BufferedReader(fileReader);
-            String data = "";
-            String line = "";
-            while ((line = bufferReader.readLine()) != null) {
-                data = line + "\n";
-            }
+            String line = bufferReader.readLine();
             bufferReader.close();
-            JSONObject dataJson = new JSONObject(data);
+            JSONArray dataJson = new JSONArray(line);
             return dataJson;
         }
         catch(Exception ex){

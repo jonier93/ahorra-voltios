@@ -3,16 +3,24 @@ package com.example.ahorravoltio;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.File;
+
 public class PantallaEstadisticas extends AppCompatActivity {
     private Spinner categoria;
     private Button btnConsult;
     private TextView tabla[][];
+    private Data_administrator objData;
+    private File objFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +31,8 @@ public class PantallaEstadisticas extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(categoria.getSelectedItem().equals("Agua")) {
-                    llenar_tabla();
+                    JSONArray jsonData = objData.readData();
+                    llenar_tabla(jsonData);
                 }
                 else {
 
@@ -49,10 +58,24 @@ public class PantallaEstadisticas extends AppCompatActivity {
                 tabla[i][j] = findViewById(txv_id);
             }
         }
+        objFile = new File(getFilesDir(), "datosAgua.json");
+        objData = new Data_administrator(objFile);
+        tabla[0][0].setText("Mes");
+        tabla[0][1].setText("Consumo");
+        tabla[0][2].setText("Precio");
     }
-    private void llenar_tabla(){
-        tabla[0][0].setText("Hola");
-        tabla[0][1].setText("Jonier");
-        tabla[0][2].setText("Porras");
+    private void llenar_tabla(JSONArray jsonData){
+        try{
+            for(int i=0; i< jsonData.length(); i++) {
+                Log.i("MyTag", jsonData.length()+"");
+                JSONObject objJson = jsonData.getJSONObject(i);
+                tabla[i+1][0].setText(objJson.getString("mes"));
+                tabla[i+1][1].setText(String.valueOf(objJson.getDouble("volumen")));
+                tabla[i+1][2].setText(String.valueOf(objJson.getDouble("precio")));
+            }
+        }
+        catch (Exception ex) {
+            Log.e("MyTag", ex.toString());
+        }
     }
 }

@@ -29,7 +29,7 @@
 
     <TableLayout
         android:id="@+id/tableLayout"
-        android:layout_width="341dp"
+        android:layout_width="369dp"
         android:layout_height="396dp"
         android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,22 +44,25 @@
                 android:id="@+id/txv00"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="40dp"
-                android:paddingVertical="10dp" />
+                android:paddingHorizontal="38dp"
+                android:paddingVertical="10dp"
+                tools:text="Mes" />
 
             <TextView
                 android:id="@+id/txv01"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="40dp"
-                android:paddingVertical="10dp" />
+                android:paddingVertical="10dp"
+                tools:text="Consumo" />
 
             <TextView
                 android:id="@+id/txv02"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="40dp"
-                android:paddingVertical="10dp" />
+                android:paddingVertical="10dp"
+                tools:text="Precio" />
         </TableRow>
 
         <TableRow
@@ -119,21 +122,21 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView18"
+                android:id="@+id/txv30"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="40dp"
                 android:paddingVertical="10dp" />
 
             <TextView
-                android:id="@+id/textView17"
+                android:id="@+id/txv31"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="40dp"
                 android:paddingVertical="10dp" />
 
             <TextView
-                android:id="@+id/textView16"
+                android:id="@+id/txv32"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="40dp"
