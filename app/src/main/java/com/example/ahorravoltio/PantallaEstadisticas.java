@@ -30,12 +30,18 @@ public class PantallaEstadisticas extends AppCompatActivity {
         btnConsult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if(categoria.getSelectedItem().equals("Agua")) {
+                    objFile = new File(getFilesDir(), "datosAgua.json");
+                    objData = new Data_administrator(objFile);
                     JSONArray jsonData = objData.readData();
-                    llenar_tabla(jsonData);
+                    llenar_tabla(jsonData, 1);
                 }
                 else {
-
+                    objFile = new File(getFilesDir(), "datosElectricidad.json");
+                    objData = new Data_administrator(objFile);
+                    JSONArray jsonData = objData.readData();
+                    llenar_tabla(jsonData, 2);
                 }
             }
         });
@@ -58,20 +64,29 @@ public class PantallaEstadisticas extends AppCompatActivity {
                 tabla[i][j] = findViewById(txv_id);
             }
         }
-        objFile = new File(getFilesDir(), "datosAgua.json");
-        objData = new Data_administrator(objFile);
         tabla[0][0].setText("Mes");
         tabla[0][1].setText("Consumo");
         tabla[0][2].setText("Precio");
     }
-    private void llenar_tabla(JSONArray jsonData){
+    private void llenar_tabla(JSONArray jsonData, int tipoElemento){
         try{
-            for(int i=0; i< jsonData.length(); i++) {
-                Log.i("MyTag", jsonData.length()+"");
-                JSONObject objJson = jsonData.getJSONObject(i);
-                tabla[i+1][0].setText(objJson.getString("mes"));
-                tabla[i+1][1].setText(String.valueOf(objJson.getDouble("volumen")));
-                tabla[i+1][2].setText(String.valueOf(objJson.getDouble("precio")));
+            if (tipoElemento == 1) {
+                for (int i = 0; i < jsonData.length(); i++) {
+                    Log.i("MyTag", jsonData.length() + "");
+                    JSONObject objJson = jsonData.getJSONObject(i);
+                    tabla[i + 1][0].setText(objJson.getString("mes"));
+                    tabla[i + 1][1].setText(String.valueOf(objJson.getDouble("volumen")));
+                    tabla[i + 1][2].setText(String.valueOf(objJson.getDouble("precio")));
+                }
+            }
+            else {
+                for (int i = 0; i < jsonData.length(); i++) {
+                    Log.i("MyTag", jsonData.length() + "");
+                    JSONObject objJson = jsonData.getJSONObject(i);
+                    tabla[i + 1][0].setText(objJson.getString("mes"));
+                    tabla[i + 1][1].setText(String.valueOf(objJson.getDouble("kilovatios")));
+                    tabla[i + 1][2].setText(String.valueOf(objJson.getDouble("precio")));
+                }
             }
         }
         catch (Exception ex) {

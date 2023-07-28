@@ -38,7 +38,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 dataJson = objData.readData();
                 establecer_datos();
-                boolean confirm = validar();
+                boolean confirm = false;
+                for (int i=0; i<dataJson.length(); i++) {
+                    confirm = validar(i);
+                    if (confirm) {
+                        i = dataJson.length();
+                    }
+                }
                 if (confirm) {
                     Intent intentPrincipal = new Intent(MainActivity.this,
                             PantallaPrincipal.class);
@@ -71,9 +77,9 @@ public class MainActivity extends AppCompatActivity {
         objUsuario = new ModelUsuario();
     }
 
-    private boolean validar(){
+    private boolean validar(int i){
         try {
-            JSONObject objJson = dataJson.getJSONObject(0);
+            JSONObject objJson = dataJson.getJSONObject(i);
             if (objUsuario.getCorreo().equals(objJson.getString("correo")) &&
                     objUsuario.getPassword().equals(objJson.getString("password"))) {
                 return true;

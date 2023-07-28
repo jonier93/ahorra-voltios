@@ -23,6 +23,7 @@ public class Data_administrator {
     public Data_administrator(File file){
         this.file = file;
     }
+
     public Data_administrator(File file, ModelUsuario objUsuario){
         this.file = file;
         this.objUsuario = objUsuario;
@@ -34,6 +35,7 @@ public class Data_administrator {
         this.objAgua = objAgua;
         tipoUsuario = 1;
     }
+
     public Data_administrator(File file, ModelElectricidad objElectricidad){
         this.file = file;
         this.objElectricidad = objElectricidad;
@@ -57,7 +59,9 @@ public class Data_administrator {
                             +objAgua.getPrecio()+"', 'mes':'"+objAgua.getMes()+"'}]");
                 }
                 else if (tipoUsuario == 2){
-
+                    bufferedWriter.write("[{'kilovatios':"+objElectricidad.getKilovatio()+"," +
+                            " 'precio':"+objElectricidad.getPrecio()+", " +
+                            "'mes':'"+objElectricidad.getMes()+"'}]");
                 }
                 bufferedWriter.close();
             }
@@ -67,21 +71,27 @@ public class Data_administrator {
                 FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
                 BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
                 if (tipoUsuario == 0) {
-                    bufferedWriter.write("[{'name':'"+objUsuario.getName()+"', " +
+                    String stringData = jsonData.toString();
+                    String stringDataProcess = stringData.substring(1,stringData.length()-1);
+                    String newUser = "{'name':'"+objUsuario.getName()+"', " +
                             "'correo':'"+objUsuario.getCorreo()+"', " +
                             "'usuario': '"+objUsuario.getUsuario()+"', " +
-                            "'password':'"+objUsuario.getPassword()+"'}]");
+                            "'password':'"+objUsuario.getPassword()+"'}";
+                    bufferedWriter.write("[" +stringDataProcess + ", " + newUser + "]");
                 }
                 else if (tipoUsuario == 1) {
                     String stringData = jsonData.toString();
-                    Log.i("MyTag", stringData);
                     String stringData_process = stringData.substring(1, stringData.length()-1);
                     String newAgua = "{'volumen':'"+objAgua.getVolumen()+"', 'precio':'"
                             +objAgua.getPrecio()+"', 'mes':'"+objAgua.getMes()+"'}";
                     bufferedWriter.write("["+ stringData_process + ", " + newAgua +"]");
                 }
                 else if (tipoUsuario == 2){
-
+                    String stringData = jsonData.toString();
+                    String stringData_process = stringData.substring(1, stringData.length()-1);
+                    String newElectricidad = "{'kilovatios':"+ objElectricidad.getKilovatio()+", " +
+                            "'precio':"+objElectricidad.getPrecio()+", 'mes':'"+objElectricidad.getMes()+"'}";
+                    bufferedWriter.write("["+stringData_process + ", " + newElectricidad+"]");
                 }
                 bufferedWriter.close();
             }
